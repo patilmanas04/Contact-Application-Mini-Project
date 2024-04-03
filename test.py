@@ -20,11 +20,18 @@ contacts = [
 #     if "manas".lower() in contact["name"].lower():
 #         print(contact)
 
-def update_contact(contact, name, email, phone_number):
-    contact["name"] = name
-    contact["email"] = email
-    contact["phone_number"] = phone_number
+# def update_contact(contact, name, email, phone_number):
+#     contact["name"] = name
+#     contact["email"] = email
+#     contact["phone_number"] = phone_number
 
-    print(contacts)
+#     print(contacts)
 
-update_contact(contacts[0], "Manas", "22amtics235@gmail.com", "8894537141")
+# update_contact(contacts[0], "Manas", "22amtics235@gmail.com", "8894537141")
+
+string = "99890"
+print(type(int(string)))
+print(type(string))
+
+if "98" in "1980":
+    print("yes")

@@ -30,22 +30,26 @@ def add_contact(name, email, phone_number):
             return
 
     contacts.append(contact)
-
+    print(f"Contact Added [Added Contact: {name}]")
     update_contacts_file()
 
 # Searching contact with a search term
-def search_contact(name):
+def search_contact(search_term):
     searched_contacts = []
     for contact in contacts:
-        if name.lower() in contact['name'].lower():
-            searched_contacts.append(contact)
+        try:
+            if type(int(search_term)) == int:
+                if search_term in str(contact['phone_number']):
+                    searched_contacts.append(contact)
+        except:
+            if search_term.lower() in contact['name'].lower():
+                searched_contacts.append(contact)
 
     return searched_contacts
 
 # Deleting contact from contacts list
 def delete_contact(contact):
     contacts.remove(contact)
-
     update_contacts_file()
 
 # Updating contact details
@@ -53,7 +57,6 @@ def update_contact(contact, name, email, phone_number):
     contact['name'] = name
     contact['email'] = email
     contact['phone_number'] = phone_number
-
     update_contacts_file()
 
 # Opening contact details
@@ -65,6 +68,7 @@ def open_contact(contact_name):
 # Displaying contacts
 def load_contacts():
     if not contacts:
+        print("Contacts -->")
         print("No Contacts Found.")
     else:
         print("Contacts -->")
@@ -83,13 +87,28 @@ def display_searched_contacts(contacts):
 # Switching between options
 def switch(option):
     if option == 1:
-        name = input("Enter name:")
+        name = input("Enter name: ")
         email = input("Enter email: ")
-        phone_number = int(input("Enter phone number: "))
-        add_contact(name, email, phone_number)
-        print(f"Contact Added [Added Contact: {name}]")
+        try:
+            phone_number = int(input("Enter phone number: "))
+        except:
+            print("Phone number should be a number.")
+            return
+        
+        if type(phone_number) != int:
+            print("Phone number should be a number.")
+            return
+        elif phone_number < 0:
+            print("Enter a valid phone number.")
+            return
+        elif phone_number > 9999999999:
+            print("Phone number should be of 10 digits.")
+            return
+        else:
+            add_contact(name, email, phone_number)
+            
     elif option == 2:
-        search_term = input("Enter search term: ")
+        search_term = input("Enter search term or phone number: ")
         searched_contacts = search_contact(search_term)
         display_searched_contacts(searched_contacts)
     elif option == 3:
@@ -102,24 +121,43 @@ def switch(option):
             print("2. Delete Contact 🗑️")
             print("3. Go Back 🔙")
 
-            option = int(input("Enter option number: "))
-            print()
+            try:
+                option = int(input("Enter option number: "))
+            except:
+                print("Invalid Option!!")
+                continue
 
             if option == 1:
                 name = input("Enter name: ")
                 email = input("Enter email: ")
-                phone_number = int(input("Enter phone number: "))
+                try:
+                    phone_number = int(input("Enter phone number: "))
+                except:
+                    print("Phone number should be a number.")
+                    return
+                
+                if type(phone_number) != int:
+                    print("Phone number should be a number.")
+                    return
+                elif phone_number < 0:
+                    print("Enter a valid phone number.")
+                    return
+                elif phone_number > 9999999999:
+                    print("Phone number should be of 10 digits.")
+                    return
+                
                 update_contact(opened_contact, name, email, phone_number)
                 print("Contact Updated.")
-                print("Updated Contact Details ==>")
+                print("Updated Contact Details -->")
                 print(f"Name: {name}\nEmail: {email}\nPhone Number: {phone_number}")
             elif option == 2:
                 delete_contact(opened_contact)
                 print(f"Contact Deleted [Deleted Contact: {opened_contact['name']}]")
+                break
             elif option == 3:
                 break
             else:
-                print("Invalid Option.")
+                print("Invalid Option!!")
     elif option == 4:
         load_contacts()
     elif option == 5:
@@ -143,7 +181,11 @@ def main():
         print("4. Display Contacts 📋")
         print("5. Exit 🔚")
     
-        option = int(input("Enter option number: "))
+        try:
+            option = int(input("Enter option number: "))
+        except:
+            print("Invald Option!!")
+            continue
         print()
 
         switch(option)
