@@ -4,13 +4,23 @@ import json
 
 contacts = []
 
+with open('contacts_store.json', 'r+') as retrived_contacts_file:
+    retrived_contacts = retrived_contacts_file.read()
+
+    if retrived_contacts:
+        contacts = json.loads(retrived_contacts)
+    else:
+        contacts = []
+
 def display_searched_contacts(contacts):
-    print("\nSearched Contacts -->")
+    contact_list.delete(1.0, tk.END)
+
+    contact_list.insert(tk.END, f"Search Results:\n")
     if not contacts:
-        print("No Contacts Found.")
+        contact_list.insert(tk.END, f"No contacts found.")
     else:
         for i, contact in enumerate(contacts):
-            print(f"{i+1}. {contact['name']}")
+            contact_list.insert(tk.END, f"{i+1}. {contact['name']}")
 
 # Retriving saved contacts from 'contacts_store.json' file
 def load_contacts():
@@ -45,6 +55,7 @@ def add_contact(name, email, phone_number):
     contacts.append(contact)
 
     update_contacts_file()
+    display_contacts()
     messagebox.showinfo("Success", "Contact added successfully.")
 
 # Function to search for contacts
@@ -71,14 +82,14 @@ def open_contact(contact_name):
 
 # Function to display contacts in the text field
 def display_contacts():
-    contact_list.delete(1.0, tk.END)  # Clear existing content
+    contact_list.delete(1.0, tk.END)
     
-    all_contacts = contacts
-    if not all_contacts:
+    if not contacts:
         contact_list.insert(tk.END, "No contacts found.")
     else:
-        for i, contact in enumerate(all_contacts, start=1):
-            contact_list.insert(tk.END, f"{i}. Name: {contact['name']}\n   Email: {contact['email']}\n   Phone Number: {contact['phone_number']}\n\n")
+        print("\nContacts -->")
+        for i, contact in enumerate(contacts, start=1):
+            contact_list.insert(tk.END, f"{i}. {contact['name']}\n")
 
 # Create the main Tkinter window
 root = tk.Tk()
@@ -181,5 +192,10 @@ contact_list.pack()
 # Display Contacts Button
 display_contacts_button = tk.Button(display_frame, text="Display Contacts", command=display_contacts)
 display_contacts_button.pack(pady=10)
+
+def main():
+    display_contacts()
+
+main()
 
 root.mainloop()
